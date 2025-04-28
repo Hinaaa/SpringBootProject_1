@@ -3,7 +3,6 @@ package com.example.springbootproject_1.Controller;
 import com.example.springbootproject_1.Model.Todo;
 import com.example.springbootproject_1.Model.TodoDto;
 import com.example.springbootproject_1.Service.TodoService;
-import jakarta.servlet.ServletRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,7 +12,7 @@ import java.util.List;
 public class TodoController {
     //object creation of service
     private final TodoService todoService;
-    //contryuctor of todo sevice
+    //contructor of todo sevice
     public TodoController(TodoService todoService) {
         this.todoService = todoService;
     }

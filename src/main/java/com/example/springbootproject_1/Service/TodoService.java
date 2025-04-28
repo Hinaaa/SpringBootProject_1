@@ -1,5 +1,6 @@
 package com.example.springbootproject_1.Service;
 
+import com.example.springbootproject_1.Exceptions.TodoNotFoundException;
 import com.example.springbootproject_1.Model.Todo;
 import com.example.springbootproject_1.Model.TodoDto;
 import com.example.springbootproject_1.repo.TodoRepo;
@@ -29,9 +30,10 @@ public class TodoService {
         todoRepo.save(todo);
         return todo;
     }
-    //get by id
+    //get by id //updated with throw exception //Updated to use custom exception
     public Todo getTodoById(String id) {
-        return todoRepo.findById(id).orElse(null);
+        return todoRepo.findById(id)
+                .orElseThrow(() -> new TodoNotFoundException("Todo" +id+ " not found"));//throwing this custom exceptin: TodoNotFoundException
     }
     //update
     public Todo updateTodo(String id, TodoDto newtodoDto) {
@@ -39,7 +41,7 @@ public class TodoService {
             Todo updatedTodo = new Todo(id, newtodoDto.description(), newtodoDto.status());
             return todoRepo.save(updatedTodo); // updated todo
         }
-        throw new RuntimeException("Todo not found");
+        throw new TodoNotFoundException("Todo not found");
     }
     //delete deleteTodoById
     public void deleteTodoById(String id) {
