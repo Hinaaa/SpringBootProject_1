@@ -14,7 +14,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 @SpringBootTest
@@ -118,7 +117,6 @@ class TodoControllerTest {
         mockMvc.perform(get("/api/todo/" + nonExistentId))
                 .andExpect(status().isNotFound()) //expected status
                 .andExpect(content().string("Todo not found"));
-
     }
 
     @Test
@@ -127,7 +125,6 @@ class TodoControllerTest {
         //GIVEN
         Todo existingTodo = new Todo("1", "test-description", TodoStatus.OPEN);
         todoRepository.save(existingTodo);
-
         //WHEN
         mockMvc.perform(delete("/api/todo/1"))
                 //THEN
