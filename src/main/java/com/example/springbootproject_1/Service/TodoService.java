@@ -12,10 +12,12 @@ import java.util.List;
 public class TodoService {
     private final TodoRepo todoRepo; //repo here
     private final IdService idService;
+    private final ChatGPTService chatGPTService; // Add this line //ADDED FOR Chat gtp Service Class
 
-    public TodoService(TodoRepo todoRepo, IdService idService) {
+    public TodoService(TodoRepo todoRepo, IdService idService, ChatGPTService chatGPTService) {
         this.todoRepo = todoRepo;
         this.idService = idService;
+        this.chatGPTService = chatGPTService;
     }
     //list of all todo
     public List<Todo> getAllTodos() { //this in Controller called
@@ -23,9 +25,10 @@ public class TodoService {
     }
     //post todo
     public Todo addTodo(TodoDto newtodoDto) {
+        String checkedSpellings = chatGPTService.getOpenAiSpellingCheck(newtodoDto.description());
         Todo todo = new Todo(
                 idService.generateId(),
-        newtodoDto.description(),
+                checkedSpellings, // use corrected text
                 newtodoDto.status());
         todoRepo.save(todo);
         return todo;
