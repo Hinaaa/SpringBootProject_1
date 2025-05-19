@@ -14,7 +14,7 @@ public class TodoService {
     private final IdService idService;
     private final ChatGPTService chatGPTService; // Add this line //ADDED FOR Chat gtp Service Class
 
-    public TodoService(TodoRepo todoRepo, IdService idService, ChatGPTService chatGPTService) {
+    public TodoService(TodoRepo todoRepo, IdService idService,ChatGPTService chatGPTService) {
         this.todoRepo = todoRepo;
         this.idService = idService;
         this.chatGPTService = chatGPTService;
@@ -22,6 +22,11 @@ public class TodoService {
     //list of all todo
     public List<Todo> getAllTodos() { //this in Controller called
         return todoRepo.findAll(); //this findAll is default of repo
+    }
+    //get by id //updated with throw exception //Updated to use custom exception
+    public Todo getTodoById(String id) {
+        return todoRepo.findById(id)
+                .orElseThrow(() -> new TodoNotFoundException("Todo" +id+ " not found"));//throwing this custom exceptin: TodoNotFoundException
     }
     //post todo
     public Todo addTodo(TodoDto newtodoDto) {
@@ -33,11 +38,6 @@ public class TodoService {
         todoRepo.save(todo);
         return todo;
     }
-    //get by id //updated with throw exception //Updated to use custom exception
-    public Todo getTodoById(String id) {
-        return todoRepo.findById(id)
-                .orElseThrow(() -> new TodoNotFoundException("Todo" +id+ " not found"));//throwing this custom exceptin: TodoNotFoundException
-    }
     //update
     public Todo updateTodo(String id, TodoDto newtodoDto) {
         if (todoRepo.existsById(id)) {
@@ -47,8 +47,12 @@ public class TodoService {
         throw new TodoNotFoundException("Todo not found");
     }
     //delete deleteTodoById
-    public void deleteTodoById(String id) {
-        todoRepo.deleteById(id);
+    public boolean deleteTodoById(String id) {
+        if (todoRepo.existsById(id)) {
+            todoRepo.deleteById(id);
+            return true;
+        } else
+            throw new TodoNotFoundException("Todo not found");
     }
 }
 
